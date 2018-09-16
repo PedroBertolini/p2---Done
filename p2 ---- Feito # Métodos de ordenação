@@ -1,0 +1,188 @@
+// Ordenar vetores
+package p2;
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class P2 {
+
+    public static void main(String[] args) {
+        Scanner ler = new Scanner(System.in);
+        Random rand = new Random();
+        int val1;
+        int tamVet;
+        String sair;
+        do {
+            tamVet = tamanhoVetor();
+            int[] vet = new int[tamVet];
+            int[] sup = new int[tamVet];
+            intervalo(vet);
+            val1 = walksV(vet);
+            switch (val1) {
+
+                case 1:
+                    insertion(vet);
+                    walksV(vet);
+                    break;
+                case 2:
+                    bubbleSort(vet);
+                    walksV(vet);
+                    break;
+                case 3:
+                    quickSort(vet, 0, vet.length - 1);
+                    walksV(vet);
+                    break;
+                case 4:
+                    selectionSort(vet);
+                    walksV(vet);
+                    break;
+                default:
+                    if (val1 != 5) {
+                        System.out.println("!Erro! //O valor informado não corresponde à um valor de seleção válido!");
+                    }
+            }
+            System.out.println("Deseja rodar o código novamente? s/n");
+            sair = ler.nextLine();
+
+        } while ("s".equals(sair));
+
+    }
+
+    //Preencher o vetor com números aleatórios
+    public static void intervalo(int[] v) {
+        Scanner ler = new Scanner(System.in);
+        Random rand = new Random();
+        int num, de, ate;
+        System.out.println("Informe o número inicial do intervalo");
+        de = ler.nextInt();
+        System.out.println("Informe o valor final do intervalo");
+        ate = ler.nextInt();
+        for (int i = 0; i < v.length; i++) {
+            num = rand.nextInt((ate - de) + 1) + de;
+            v[i] = num;
+
+        }
+    }
+
+    //Definir o tamanho do vetor  
+    public static int tamanhoVetor() {
+        Scanner ler = new Scanner(System.in);
+        int vetor;
+        System.out.println("Informe o tamanho do vetor");
+        vetor = ler.nextInt();
+        return vetor;
+    }
+
+    //Mostrar o conteúdo do vetor
+    public static int walksV(int[] a) {
+        Scanner ler = new Scanner(System.in);
+        int option;
+        int i = 0;
+        System.out.println("--Situação atual do array--");
+        for (; i < a.length; i++) {
+            if (i == 0) {
+                System.out.print("[");
+            }
+            System.out.print(a[i]);
+
+            if (i == a.length - 1) {
+                System.out.println("]");
+            }
+            if (i < a.length - 1) {
+                System.out.print("|");
+            }
+        }
+        System.out.println();
+        System.out.println("O que deseja fazer com o array?");
+        System.out.println("Digite 1 para ordenar o vetor com InsertionSort");
+        System.out.println("Digite 2 para ordenar o vetor com BubbleSort");
+        System.out.println("Digite 3 para ordenar o vetor com QuickSort");
+        System.out.println("Digite 4 para ordenar o vetor com SelectionSort");
+        System.out.println("Digite 5 para sair!");
+
+        option = ler.nextInt();
+        return option;
+    }
+
+    //Insertion
+    public static void insertion(int[] vet) {
+        int j = 1;
+        int k;
+        int i;
+        for (; j < vet.length; j++) {
+            k = vet[j];
+            for (i = j - 1; (i >= 0) && (vet[i] > k); i--) {
+                vet[i + 1] = vet[i];
+            }
+            vet[i + 1] = k;
+        }
+    }
+//BubbleSort
+
+    private static void bubbleSort(int v[]) {
+        boolean troca = true;
+        int aux;
+        while (troca) {
+            troca = false;
+            for (int i = 0; i < v.length - 1; i++) {
+                if (v[i] > v[i + 1]) {
+                    aux = v[i];
+                    v[i] = v[i + 1];
+                    v[i + 1] = aux;
+                    troca = true;
+                }
+            }
+        }
+    }
+    
+//QuickSort
+
+    private static void quickSort(int[] v, int inicio, int fim) {
+        if (inicio < fim) {
+            int pPivo = separarV(v, inicio, fim);
+            quickSort(v, inicio, pPivo - 1);
+            quickSort(v, pPivo + 1, fim);
+        }
+    }
+
+    //Separar Vetor, complemento do método quickSort();   
+    private static int separarV(int[] v, int inicio, int fim) {
+        int pivo = v[inicio];
+        int i = inicio + 1, f = fim;
+        while (i <= f) {
+            if (v[i] <= pivo) {
+                i++;
+            } else if (pivo < v[f]) {
+                f--;
+            } else {
+                int troca = v[i];
+                v[i] = v[f];
+                v[f] = troca;
+                i++;
+                f--;
+            }
+        }
+        v[inicio] = v[f];
+        v[f] = pivo;
+        return f;
+    }
+
+    //SelectionSort
+    public static void selectionSort(int[] v) {
+        for (int fixo = 0; fixo < v.length - 1; fixo++) {
+            int menor = fixo;
+
+            for (int i = menor + 1; i < v.length; i++) {
+                if (v[i] < v[menor]) {
+                    menor = i;
+                }
+            }
+            if (menor != fixo) {
+                int t = v[fixo];
+                v[fixo] = v[menor];
+                v[menor] = t;
+            }
+        }
+    }
+
+}
